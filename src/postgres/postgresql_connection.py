@@ -92,4 +92,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)
