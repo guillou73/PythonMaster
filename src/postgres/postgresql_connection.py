@@ -17,29 +17,36 @@ app = Flask(__name__)
 def connect_to_postgres():
     try:
         # Create an engine to connect to PostgreSQL
-        engine = create_engine(f'postgresql://{username}:{password}@{host}:{port}/{databaseName}')
+        # engine = create_engine(f'postgresql://{username}:{password}@{host}:{port}/{databaseName}')
+        engine = create_engine('postgresql://{username}:{password}@{host}:{port}/{databaseName}'.format(
+            username=username,
+            password=password,
+            host=host,
+            port=port,
+            databaseName=databaseName
+        ))
         print("Connection to PostgreSQL established successfully.")
         return engine
     except Exception as error:
-        print(f"Error while connecting to PostgreSQL: {error}")
+        print("Error while connecting to PostgreSQL: {error}".format(error=error))
         return None
 
 def read_csv_file(file_path):
     try:
         df = pd.read_csv(file_path)
-        print(f"CSV file read successfully from {file_path}")
+        print("CSV file read successfully from {file_path}".format(filePath = file_path))
         return df
     except Exception as error:
-        print(f"Error while reading CSV file: {error}")
+        print("Error while reading CSV file: {error}")
         return None
 
 def write_to_postgres(engine, df, table_name, if_exists='replace'):
     try:
         # Write the DataFrame to the PostgreSQL table
         df.to_sql(table_name, engine, if_exists=if_exists, index=False)
-        print(f"Data written to {table_name} successfully.")
+        print("Data written to {table_name} successfully.")
     except Exception as error:
-        print(f"Error while writing data to PostgreSQL: {error}")
+        print("Error while writing data to PostgreSQL: {error}")
 
 def close_connection(engine):
     if engine:
@@ -70,7 +77,7 @@ def get_data():
         return jsonify(result_list)
 
     except Exception as error:
-        return jsonify({"error": f"Error querying the database: {error}"}), 500
+        return jsonify({"error": "Error querying the database: error"}), 500
     finally:
         session.close()
 
