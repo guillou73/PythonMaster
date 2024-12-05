@@ -15,8 +15,8 @@ class TestCalc(unittest.TestCase):
     def test_inputType(self):
         self.assertIsInstance(self.my_message, str)
 
-    def test_funcRetrunSomething(self):
-        self.assertEqual(encrypt(self.my_message),str)
+    def test_funReturnSomething(self):
+        self.assertIsInstance(encrypt(self.my_message),str)
     
     def test_lenIO(self):
         self.assertEqual(len(self.my_message), len(self.my_message))
