@@ -1,0 +1,15 @@
+Hive is data warehouse
+Developed by facebook
+Hive use hdfs storage
+It create grid (schema) on top of hdfs
+Down the line its use map reduce and optionaly have spark,
+We can run hive on spark also and Hive on tez
+Hive is fault tolerance 
+Hive have hive server where you hive query runs
+Meta store have meta data, schemas, and tables
+Hive two different kinds of table, 1. Internal table or Manage table and 2nd is External table 
+	1. Within Internal table we have Temporary, Manage curd and Insert only.
+	2. ACID can be achieve in only managed curd 
+	3. When we delete records in internal table its delete all including schemas but when we delete records in external table it won't delete schemas 
+	4. External table is most useful when doing batch processing
+Internal table is for transactional queries within hadoop

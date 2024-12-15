@@ -1,0 +1,101 @@
+Internal (Managed) Tables:
+Definition: An internal table is managed by Hive, meaning Hive controls both the metadata and the actual data in HDFS. When you drop an internal table, both the table schema and its data are deleted.
+Support for Updates/Deletes:
+Update and Delete Operations: Internal tables support update and delete operations, but only when the table is transactional and stored in an ACID-compliant format like ORC.
+
+ACID Transactions: To use UPDATE or DELETE with internal tables, the table must be created with the following properties:
+
+transactional = true
+Stored as ORC format (ORC is the ACID-compliant file format).
+
+Why Use ORC for Internal Tables with ACID Support?
+ORC File Format: ORC (Optimized Row Columnar) is an efficient, ACID-compliant columnar storage format in Hive. It is specifically optimized for read-heavy workloads and supports efficient storage, compression, and indexing. More importantly, it supports transactions (insert, update, delete), making it suitable for scenarios where data modifications are needed.
+
+By using ORC with ACID transactions, you gain the ability to:
+
+Perform insert, update, and delete operations.
+Leverage the powerful features of columnar storage, such as better compression and query performance.
+
+File Formats Overview
+Plain Text (Text Files)
+
+Description: A plain text file is just that—data stored as human-readable text. Common formats include CSV, TSV, and even JSON or XML when stored in a text-based format.
+Examples: .txt, .csv, .json, .xml.
+Benefits:
+Simplicity: Text files are simple to read and write, making them portable and easy to handle.
+Interoperability: Supported by almost every data processing tool.
+Limitations:
+No schema: There is no built-in support for data types, indexing, or compression.
+Scalability issues: As the size of the data grows, plain text files become inefficient for large-scale processing due to lack of indexing and compression.
+Speed: Slow for large datasets, especially for queries and aggregations.
+CSV (Comma-Separated Values)
+
+Description: A widely used plain-text format where each row is a data record, and fields are separated by commas.
+Benefits:
+Simple and human-readable.
+Easy to import/export with various tools, including spreadsheets and databases.
+Limitations:
+No support for complex structures: It doesn't handle nested data well (e.g., hierarchical data).
+No type enforcement: Data types need to be inferred.
+Speed: Medium; CSV is better than plain text due to its structured format but can become inefficient with large-scale data.
+JSON (JavaScript Object Notation)
+
+Description: A text-based format that represents data as objects (key-value pairs) and is used primarily for transmitting data in web applications.
+Benefits:
+Flexible and hierarchical: JSON can represent complex, nested data structures, making it suitable for semi-structured data.
+Widely supported: Almost every modern programming language supports JSON parsing.
+Limitations:
+Verbose: JSON is text-heavy, which can result in larger file sizes.
+Slower parsing: Since it's text-based, parsing and processing JSON can be slower than binary formats.
+Speed: Medium; slower than CSV or Parquet due to its text nature and lack of indexing.
+XML (Extensible Markup Language)
+
+Description: A flexible text-based format used to encode documents in a way that is both human-readable and machine-readable.
+Benefits:
+Self-describing: XML is a marked-up format that includes both data and metadata, making it rich in structure.
+Widely used in industries like finance, healthcare, and publishing.
+Limitations:
+Verbosity: XML files can be large due to extensive use of tags, making it inefficient for large-scale data.
+Complexity: Parsing XML can be resource-intensive compared to other formats.
+Speed: Slow; larger file sizes and slower parsing compared to JSON or CSV.
+
+Columnar and Optimized File Formats
+ORC (Optimized Row Columnar)
+
+Description: A columnar storage file format designed for use with Hive and Hadoop, optimized for read-heavy queries and massive datasets.
+Benefits:
+High compression: ORC files compress data very efficiently, reducing storage costs.
+Faster queries: Columnar storage enables faster query performance because only the necessary columns are read.
+Schema support: ORC supports data types and schema enforcement, which ensures better consistency.
+Limitations:
+Not human-readable: ORC files are binary, meaning they cannot be easily inspected without specialized tools.
+Write-heavy operations: While great for read-heavy workloads, writing to ORC files can be slower than row-based formats.
+Speed: Very fast for analytical queries on large datasets, especially with complex joins and aggregations.
+Parquet
+
+Description: Another columnar storage format designed for efficient querying and optimized for Hadoop-based systems like Hive and Spark.
+Benefits:
+Columnar storage: Like ORC, Parquet stores data in columns, making it fast for analytical queries.
+Schema evolution: Supports schema changes over time, which makes it flexible for large datasets that may evolve.
+Compression: Parquet files are compressed and optimized for storage and querying.
+Limitations:
+Not as efficient as ORC for Hive: Parquet tends to have slower performance in Hive compared to ORC, though it works better with other frameworks like Spark.
+Binary format: Similar to ORC, it's not human-readable.
+Speed: Fast for large-scale data processing, particularly in Spark and other big data tools.
+Avro
+
+Description: A compact, fast, and binary file format that is ideal for serializing data.
+Benefits:
+Compact and fast: Avro files are smaller and faster to read/write than text formats like CSV or JSON.
+Supports schema: It stores data along with a schema, ensuring consistency in data types and structures.
+Supports both row and columnar formats: Good for both small and large datasets.
+Limitations:
+Not ideal for complex queries: It is often used for streaming data or when you don't need complex querying.
+Binary format: Not human-readable, similar to ORC and Parquet.
+Speed: Fast for both read and write operations, but not as optimized for complex analytical queries as columnar formats like ORC or Parquet.
+Choosing the Right Format for Your Use Case
+For Data Exchange (Interoperability): If you're working with data exchange between different systems or need to read/write the data using a variety of tools, CSV, JSON, and XML are good choices. However, they become inefficient with very large datasets.
+
+For Analytical Queries (Big Data): ORC, Parquet, and Avro are designed for fast analytics and are optimized for big data platforms (e.g., Hive, Spark). Among these, ORC is particularly optimized for Hive workloads, while Parquet is more commonly used in Spark and other modern tools.
+
+For Data Storage: If your focus is on efficient storage, formats like ORC and Parquet offer excellent compression and read performance, making them ideal for large-scale data lakes or warehouses.
