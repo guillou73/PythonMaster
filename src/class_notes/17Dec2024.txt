@@ -1,0 +1,119 @@
+Uttam, 12:41
+FROM openjdk:8
+
+# Install Scala
+ENV SCALA_VERSION 2.12.15
+ENV SCALA_HOME /usr/share/scala
+ENV PATH $PATH:$SCALA_HOME/bin
+RUN \
+  cd /tmp && \
+  curl -Lo scala-${SCALA_VERSION}.tgz https://downloads.typesafe.com/scala/${SCALA_VERSION}/scala-${SCALA_VERSION}.tgz && \
+  tar xf scala-${SCALA_VERSION}.tgz && \
+  mv scala-${SCALA_VERSION} ${SCALA_HOME} && \
+  rm scala-${SCALA_VERSION}.tgz
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the Scala source code into the container
+COPY HelloWorld.scala .
+
+# Compile the Scala source code
+RUN scalac HelloWorld.scala
+
+# Set the entrypoint
+CMD ["scala", "HelloWorld"]
+
+build.sbt
+
+name := "my-scala-app"
+
+version := "1.0"
+
+scalaVersion := "2.13.5"
+
+libraryDependencies += "org.apache.spark" %% "spark-core" % "2.4.7"
+
+mainClass in Compile := Some("com.example.Main")
+
+HelloWorld.scala
+
+object HelloWorld {
+  def main(args: Array[String]): Unit = {
+    println("Hello, World!")
+  }
+}
+
+
+Obinna, 12:48
+docker image rm docker_inage id
+
+
+Uttam, 12:51
+docker rm <containerid)
+
+To remove all containers:To remove all containers:
+docker rm -f $(docker ps -a -q)
+
+To remove all images:
+docker rmi -f $(docker images -a -q)
+
+To remove all containers:To remove all containers:
+docker rm -f $(docker ps -a -q)
+
+To remove all images:
+docker rmi -f $(docker images -a -q)
+
+
+
+
+docker images -a
+
+Docker ps -a               # Lists containers (and tells you which images they are spun from)
+Docker images              # Lists images  
+Docker rm <container_id>   # Removes a container
+
+Docker rmi <image_id>      # Removes an image 
+                           # Will fail if there is a running instance of that image i.e. container
+
+docker rmi -f <image_id>   # Forces removal of image even if it is referenced in multiple repositories, 
+                           # i.e. same image id given multiple names/tags 
+                           # Will still fail if there is a docker container referencing 
+
+docker-compose.yml
+
+
+DockerTutorial/Docker/docker-compose.yml at main · uttamraj9/DockerTutorial
+https://github.com
+version: '3'
+services:
+  python:
+    build:
+      context: ./python
+    volumes:
+      - ./python:/app
+    command: python /app/hello_world.py
+  scala:
+    build:
+      context: ./scala
+    volumes:
+      - ./scala:/app
+    command: scala HelloWorld.scala
+  pyspark:
+    build:
+      context: ./pyspark
+    volumes:
+      - ./pyspark:/app
+    command: spark-submit --master local[*] /app/app.py
+
+docker-compose build
+
+docker-compose up
+
+
+Docker Hub Container Image Library | App Containerization
+https://hub.docker.com
+
+cicd
+
+jeniks
