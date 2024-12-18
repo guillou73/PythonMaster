@@ -1,11 +1,16 @@
 import pandas as pd
 import numpy as np
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, when, lit, avg
 
-salesDataCSVPath = "D://Workspace//PythonMaster//src//pyspark//sample_data.csv"
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("PySpark Transformations") \
+    .master("local[*]") \
+    .getOrCreate()
 
-df = pd.read_csv(salesDataCSVPath)
-
-# df.show()
-print(salesDataCSVPath)
-
-print("Hello")
+salesDataCSVPath = "D:/Workspace/PythonMaster/src/pyspark/sample_data.csv"
+data = spark.read.csv(salesDataCSVPath, header=True, inferSchema=True)
+# Show the original data
+print("Original Data:")
+data.show()
