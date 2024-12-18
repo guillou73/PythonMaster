@@ -14,3 +14,9 @@ data = spark.read.csv(salesDataCSVPath, header=True, inferSchema=True)
 # Show the original data
 print("Original Data:")
 data.show()
+
+# 1. Filter Data Based on Condition 
+filtered_data = data.filter(col("Category") == "Furniture")
+print("*******************************************")
+print("Filtered Data (Category = Furniture):")
+filtered_data.show()
