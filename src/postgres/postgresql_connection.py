@@ -71,6 +71,7 @@ def get_data():
         data = result.fetchall()
 
         # Convert the query result into a list of dictionaries
+        print(f"Print {data.head()}")
         result_list = [dict(zip(result.keys(), row)) for row in data]
 
         # Return the result as JSON
