@@ -84,12 +84,12 @@ def get_data():
 
 def main():
     engine = connect_to_postgres()
-    if engine is not None:
-        df = read_csv_file(filePath)
-        if df is not None:
-            table_name = myTableName
-            write_to_postgres(engine, df, table_name)
-        close_connection(engine)
+    # if engine is not None:
+    #     df = read_csv_file(filePath)
+    #     if df is not None:
+    #         table_name = myTableName
+    #         write_to_postgres(engine, df, table_name)
+    #     close_connection(engine)
 
 if __name__ == "__main__":
     main()
